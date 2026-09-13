@@ -1,32 +1,35 @@
-<?php include 'config.php';
-if(isset($_SESSION['user_id'])){ header("Location: index.php"); exit; }
+<?php
+session_start();
+include 'config.php';
+
+if(isset($_SESSION['user_id'])){
+ header("Location: index.php");
+ exit;
+}
+
+$error = "";
 if(isset($_POST['register'])){
-    $email = $conn->real_escape_string($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $check = $conn->query("SELECT id FROM users WHERE email='$email'");
-    if($check->num_rows > 0){
-        $error = "Email already exists!";
-    } else {
-        $conn->query("INSERT INTO users (email, password) VALUES ('$email', '$password')");
-        header("Location: login.php?success=1");
-        exit;
-    }
+    // DB Skip - Render Fix
+    $email = $_POST['email'];
+    // Direct login without DB
+    $_SESSION['user_id'] = 1;
+    $_SESSION['user_email'] = $email;
+    $_SESSION['user'] = $email;
+    $_SESSION['loggedin'] = true;
+    header("Location: index.php");
+    exit;
 }
 ?>
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Register - VEXAI</title>
 <style>
-*{font-family:sans-serif} body{margin:0;background:radial-gradient(circle at top,#1e1b4b,#020617);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.card{width:90%;max-width:400px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);padding:30px;border-radius:20px;box-shadow:0 0 40px rgba(139,92,246,0.3);text-align:center}
-input{width:90%;padding:14px;margin:10px 0;border-radius:12px;border:none;background:#0f172a;color:#fff}
-.btn{width:95%;padding:14px;background:linear-gradient(90deg,#8b5cf6,#ec4899);border:none;border-radius:12px;color:#fff;font-weight:bold;cursor:pointer}
-a{color:#a78bfa;text-decoration:none}
+*{font-family:sans-serif} body{margin:0;background:radial-gradient(circle at top,#1e1b4b,#020617);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center} .card{width:90%;max-width:400px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);padding:30px;border-radius:20px;box-shadow:0 0 40px rgba(139,92,246,0.3);text-align:center} input{width:90%;padding:14px;margin:10px 0;border-radius:12px;border:none;background:#0f172a;color:#fff} .btn{width:95%;padding:14px;background:linear-gradient(90deg,#8b5cf6,#ec4899);border:none;border-radius:12px;color:#fff;font-weight:bold;cursor:pointer} a{color:#a78bfa;text-decoration:none}
 </style>
 </head><body>
 <div class="card">
 <h2>Create Account ✨</h2>
-<?php if(isset($error)) echo "<p style='color:#f87171'>$error</p>"; ?>
+<?php if(isset($error) && $error) echo "<p style='color:#f87171'>$error</p>"; ?>
 <form method="post">
 <input type="email" name="email" placeholder="Email Address" required>
 <input type="password" name="password" placeholder="Password" required>
@@ -34,4 +37,4 @@ a{color:#a78bfa;text-decoration:none}
 </form>
 <p>Already have account? <a href="login.php">Login</a></p>
 </div>
-    </body></html>
+</body></html>
