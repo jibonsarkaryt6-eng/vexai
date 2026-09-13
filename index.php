@@ -1,5 +1,5 @@
 <?php
-include '../config.php';
+include('config.php');
 // Simple Admin Auth - তোমার Email দিয়ে Admin
 $admin_email = "admin@gmail.com"; // এখানে তোমার Email দাও
 if(!isset($_SESSION['email']) || $_SESSION['email'] != $admin_email){
