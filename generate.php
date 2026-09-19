@@ -26,7 +26,7 @@ if(isset($_FILES['image'])){
     $msg = "HF Token পাওয়া যায়নি!";
   } else {
     $imageData = file_get_contents($path);
-    $ch = curl_init("https://api-inference.huggingface.co/models/stabilityai/stable-video-diffusion-img2vid-xt");
+    $ch = curl_init("https://router.huggingface.co/hf-inference/models/stabilityai/stable-video-diffusion-img2vid-xt");
     curl_setopt_array($ch, [
       CURLOPT_RETURNTRANSFER=>true,
       CURLOPT_POST=>true,
